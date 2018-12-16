@@ -165,8 +165,37 @@ join store on store.store_id = inventory.store_id
 group by store.store_id;
 
 # 7g
+select store.store_id, city.city, country.country
+from country
+join city on city.country_id = country.country_id
+join address on address.city_id = city.city_id
+join store on address.address_id = store.address_id
 
+# 7h
+select c.name 'Genre', sum(p.amount) as 'Gross'
+from category c
+join film_category fc on c.category_id = fc.category_id
+join inventory i on fc.film_id = i.film_id
+join rental r on i.inventory_id = r.inventory_id
+join payment p on r.rental_id = p.rental_id
+group by c.name 
+order by gross desc limit 5;
 
+# 8a
+create view top_gross_by_genre as
+select c.name 'Genre', sum(p.amount) as 'Gross'
+from category c
+join film_category fc on c.category_id = fc.category_id
+join inventory i on fc.film_id = i.film_id
+join rental r on i.inventory_id = r.inventory_id
+join payment p on r.rental_id = p.rental_id
+group by c.name 
+order by gross desc limit 5;
 
+# 8b
+select * from top_gross_by_genre
+
+# 8c
+drop view top_gross_by_genre
 
 
